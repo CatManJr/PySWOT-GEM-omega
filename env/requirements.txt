@@ -1,0 +1,17 @@
+# Python replaces MATLAB CreateDensityFields.m; omega inversion uses xinvert
+# (https://github.com/miniufo/xinvert), as in Thompson et al. (2026).
+
+xinvert>=0.2.0
+xarray>=2024.1.0
+numpy>=1.24
+scipy>=1.11
+numba>=0.58
+dask[array]>=2024.1.0
+netCDF4>=1.6
+gsw>=3.6.16
+glidertools>=2021.3
+matplotlib>=3.8
+pandas>=2.0
+h5netcdf>=1.3
+tqdm>=4.66
+pytest>=8.0

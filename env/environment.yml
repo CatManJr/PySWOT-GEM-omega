@@ -1,0 +1,21 @@
+name: swot-qg-omega
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10,<3.13
+  - pip
+  - xarray>=2024.1.0
+  - numpy>=1.24
+  - scipy>=1.11
+  - numba>=0.58
+  - dask>=2024.1.0
+  - netcdf4>=1.6
+  - gsw>=3.6.16
+  - matplotlib>=3.8
+  - pandas>=2.0
+  - h5netcdf>=1.3
+  - tqdm>=4.66
+  - pytest>=8.0
+  - pip:
+      - xinvert>=0.2.0
+      - glidertools>=2021.3

@@ -1,0 +1,17 @@
+# Bytecode and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.nbc
+*.nbi
+
+# Observations, Zenodo binaries, and pipeline outputs.
+# Code, tests, and the deposited MATLAB scripts stay tracked.
+# Refetch binaries with scripts/download_zenodo.py.
+data/
+*.nc
+*.mat
+*.tar
+*.zip
+_paper_extract.txt
+DATA_MANIFEST.json

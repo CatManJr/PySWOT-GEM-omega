@@ -1,0 +1,10 @@
+[project]
+name = "swot-qg-omega"
+version = "0.1.0"
+description = "Python port of the FOCUS SWOT local-GEM and QG-omega diagnostics, with xinvert for w."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
