@@ -1,12 +1,12 @@
 # SWOT local GEM and QG omega
 
-Python replacement for the MATLAB half of Thompson et al. (*Communications Earth & Environment*, 2026, doi:10.1038/s43247-026-03673-y). The quasi-geostrophic omega inversion for vertical velocity $w$ stays in [`xinvert`](https://github.com/miniufo/xinvert), which is the solver named in that paper.
+Python replacement for the MATLAB half of Thompson et al. (*Communications Earth & Environment*, 2026, doi:10.1038/s43247-026-03673-y). The quasi-geostrophic omega inversion for vertical velocity $w$ stays in [`xinvert`](https://github.com/miniufo/xinvert), which is the solver used in that paper.
 
-The package reconstructs upper-ocean density on a SWOT KaRIn swath from a local gravest empirical mode (GEM), builds the thermal-wind velocity and the Hoskins Q-vector, tiles each swath for an elliptic solve, and writes $w$ back onto the swath. It is a migration of the deposited diagnostic script, not a new dynamical model and not a substitute for the published SWOT or glider observations.
+The package reconstructs upper-ocean density on a SWOT KaRIn swath from a local gravest empirical mode (GEM), builds the thermal-wind velocity and the Hoskins Q-vector, tiles each swath for an elliptic solve, and writes $w$ back onto the swath. It is a migration of the deposited diagnostic script.
 
-## What moved, and what did not
+## Translating the MATLAB diagnostic part to Python
 
-Thompson et al. split the calculation in the same way this repository does. `CreateDensityFields.m` (Zenodo doi:10.5281/zenodo.19981347) reads SWOT L3 absolute dynamic topography and cyclogeostrophic surface velocity, looks up $\sigma_0(z)$ from a precomputed GEM, and forms buoyancy, $M^2$, thermal-wind shear, vorticity, strain, and the omega forcing $2\nabla\cdot\mathbf{Q}$. That script does not invert for $w$. It reads a separate file, written by `xinvert`, and stitches the left and right solutions onto the swath. Code availability in the paper states the same division.
+I strictly kept splitting the calculation in the same way as Thompson et al. did . `CreateDensityFields.m` (Zenodo doi:10.5281/zenodo.19981347) reads SWOT L3 absolute dynamic topography and cyclogeostrophic surface velocity, looks up $\sigma_0(z)$ from a precomputed GEM, and forms buoyancy, $M^2$, thermal-wind shear, vorticity, strain, and the omega forcing $2\nabla\cdot\mathbf{Q}$. That script does not invert for $w$. It reads a separate file, written by `xinvert`, and stitches the left and right solutions onto the swath. Code availability in the paper states the same division.
 
 This package therefore replaces only the MATLAB diagnostic path. `numpy`, `scipy`, `numba`, and `xarray` implement the GEM lookup, centered differences, Gaussian smoothing, Q-vector, and mirror tiling. `xinvert.invert_omega` remains the elliptic solver, with Dirichlet conditions $w=0$ at the top and bottom of the extended depth grid. Horizontal periodicity is requested on both tiled axes. Current `xinvert` kernels enforce a periodic condition only on the last axis; that limit is reported at runtime and is not hidden by a second solver.
 
@@ -74,3 +74,9 @@ pytest
 ```
 
 `--no-w` writes density, velocity diagnostics, and Q-vector forcing. The default single-pass command also calls `xinvert`, which takes on the order of 15 minutes per swath. Orientation defaults to the along-track diagonal (SW--NE or NW--SE). `run_focus_passes.py` uses the last January 2024 cycle of each FOCUS file under `data/swot/` and, unless `--with-w` is set, skips the inversion. `pytest` checks the operators and, when the reference NetCDF and pass 155 SWOT file are present, recomputes the diagnostic fields against that NetCDF. The archived $w$ correlation is checked only if `data/derived/python/qg_omega_swath_155_9.nc` already contains `w_vel`.
+
+### References
+
+Thompson, A.F., Dove, L.A., Tranchant, YT. *et al.* The three-dimensional structure of fine-scale, vertical velocities in the Southern Ocean inferred from space. *Commun Earth Environ* **7**, 712 (2026). https://doi.org/10.1038/s43247-026-03673-y
+
+Qian, Y., (2023). xinvert: A Python package for inversion problems in geophysical fluid dynamics. Journal of Open Source Software, 8(89), 5510, https://doi.org/10.21105/joss.05510
